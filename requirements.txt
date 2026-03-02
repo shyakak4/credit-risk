@@ -1,0 +1,25 @@
+# Data handling
+pandas==2.2.0
+numpy==1.26.4
+
+# ML
+scikit-learn==1.4.0
+xgboost==2.0.3
+imbalanced-learn==0.12.0      # because credit risk data is imbalanced
+
+# Experiment tracking
+mlflow==2.11.0
+
+# Data validation
+great-expectations==0.18.12
+
+# API serving
+fastapi==0.110.0
+uvicorn==0.27.1
+
+# Config management
+pyyaml==6.0.1
+python-dotenv==1.0.1
+
+# Utilities
+joblib==1.3.2                  # saving/loading models

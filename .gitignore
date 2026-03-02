@@ -1,0 +1,28 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+*.egg-info/
+
+# Data (tracked by DVC, not Git)
+data/
+
+# MLflow
+mlruns/
+
+# Environment
+.env
+
+# Models (tracked by DVC, not Git)
+models/
+
+# Jupyter notebooks checkpoints
+notebooks/.ipynb_checkpoints/
+
+# DVC cache
+.dvc/cache
+.dvc/tmp
+
+# OS
+.DS_Store
+*.swp
