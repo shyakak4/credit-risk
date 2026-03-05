@@ -1,0 +1,42 @@
+# .safety-policy.yml
+# Documents known vulnerabilities we have assessed and accepted,
+# with justification for each decision.
+
+version: "3.0"
+
+vulnerability-ignore-list:
+  # MLflow deserialization vulnerabilities (CVE-2024-37052 through CVE-2024-37060)
+  # Risk: malicious model files can execute code when loaded
+  # Accepted because:
+  #   - MLflow runs locally only, not exposed to internet
+  #   - Only trusted developers load models in this project
+  #   - No external model uploads accepted
+  #   - Will reassess if MLflow is ever deployed publicly
+  71587:
+    reason: "MLflow local use only - no untrusted model uploads"
+    expires: "2026-12-31"
+  71691:
+    reason: "MLflow local use only - no untrusted model uploads"
+    expires: "2026-12-31"
+  71693:
+    reason: "MLflow local use only - no untrusted model uploads"
+    expires: "2026-12-31"
+  71579:
+    reason: "MLflow local use only - no untrusted model uploads"
+    expires: "2026-12-31"
+  71584:
+    reason: "MLflow local use only - no untrusted model uploads"
+    expires: "2026-12-31"
+  71578:
+    reason: "MLflow local use only - no untrusted model uploads"
+    expires: "2026-12-31"
+  71577:
+    reason: "MLflow local use only - no untrusted model uploads"
+    expires: "2026-12-31"
+  71692:
+    reason: "MLflow local use only - no untrusted model uploads"
+    expires: "2026-12-31"
+  # skops deserialization vulnerability (CVE-2024-37065)
+  71782:
+    reason: "skops loaded from trusted local artifacts only"
+    expires: "2026-12-31"

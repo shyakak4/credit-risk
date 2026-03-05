@@ -91,8 +91,15 @@ def validate_cleaned_data(df: pd.DataFrame) -> bool:
         )
 
     expected_cols = [
-        "age", "sex", "job", "housing", "saving_accounts",
-        "checking_account", "credit_amount", "duration", "purpose"
+        "age",
+        "sex",
+        "job",
+        "housing",
+        "saving_accounts",
+        "checking_account",
+        "credit_amount",
+        "duration",
+        "purpose",
     ]
     missing = [c for c in expected_cols if c not in df.columns]
     if missing:
