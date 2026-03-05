@@ -1,0 +1,9 @@
+# params.yaml
+# DVC tracks this file — changing any value here
+# triggers a re-run of the affected pipeline stages.
+
+model:
+  n_clusters: 3      # K=3: low / medium / high risk
+  k_min: 2           # elbow analysis start
+  k_max: 8           # elbow analysis end
+  random_state: 42

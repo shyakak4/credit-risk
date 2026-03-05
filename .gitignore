@@ -4,11 +4,22 @@ __pycache__/
 *.pyc
 *.egg-info/
 
-# Data (tracked by DVC, not Git)
-data/
+# 1. Ignore the contents of data, but not the directory itself
+data/**
 
+# 2. Specifically exclude the directory from being ignored so Git can enter it
+!data/
+!data/**/
+
+# 3. Now negate the tracking files so Git can see them
+!data/**/*.dvc
+!data/**/.gitkeep
 # MLflow
+mlflow.db
 mlruns/
+
+models/**
+!models/*.dvc
 
 # Environment
 .env
@@ -18,6 +29,7 @@ models/
 
 # Jupyter notebooks checkpoints
 notebooks/.ipynb_checkpoints/
+notebooks/*.png
 
 # DVC cache
 .dvc/cache

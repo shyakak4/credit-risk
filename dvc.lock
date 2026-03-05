@@ -1,0 +1,126 @@
+schema: '2.0'
+stages:
+  ingest:
+    cmd: python src/data/ingestion.py
+    deps:
+    - path: configs/config.yaml
+      hash: md5
+      md5: 5c1b54466c5c14ba34794a5ce4ce0662
+      size: 533
+    - path: data/raw/german_credit_data.csv
+      hash: md5
+      md5: 5332ec35ab6f48d93665f6c7cf8b0a57
+      size: 47544
+    - path: src/data/ingestion.py
+      hash: md5
+      md5: f0af2a5bf6cafc20a0d779d3cee05a2c
+      size: 3176
+  preprocess:
+    cmd: python src/data/preprocessing.py
+    deps:
+    - path: configs/config.yaml
+      hash: md5
+      md5: 5c1b54466c5c14ba34794a5ce4ce0662
+      size: 533
+    - path: data/raw/german_credit_data.csv
+      hash: md5
+      md5: 5332ec35ab6f48d93665f6c7cf8b0a57
+      size: 47544
+    - path: src/data/preprocessing.py
+      hash: md5
+      md5: 5a2049f8f1f4832b863b6676d6b3c829
+      size: 4182
+    outs:
+    - path: data/processed/cleaned.csv
+      hash: md5
+      md5: 75331d2816ebeae02616ce30ae99b667
+      size: 45951
+  build_features:
+    cmd: python src/features/build_features.py
+    deps:
+    - path: configs/config.yaml
+      hash: md5
+      md5: 5c1b54466c5c14ba34794a5ce4ce0662
+      size: 533
+    - path: data/processed/cleaned.csv
+      hash: md5
+      md5: 75331d2816ebeae02616ce30ae99b667
+      size: 45951
+    - path: src/features/build_features.py
+      hash: md5
+      md5: 4878fdf626157267537d8d06ea3471c9
+      size: 5411
+    params:
+      params.yaml:
+        model.n_clusters: 3
+    outs:
+    - path: data/features/features.csv
+      hash: md5
+      md5: 46648e7cd638cc5f97e6d90ce4b3e46a
+      size: 93858
+    - path: models/robust_scaler.pkl
+      hash: md5
+      md5: 2a3732a6205873d4c58f672f90cc1e62
+      size: 1287
+  train:
+    cmd: python src/models/train.py
+    deps:
+    - path: configs/config.yaml
+      hash: md5
+      md5: 5c1b54466c5c14ba34794a5ce4ce0662
+      size: 533
+    - path: data/features/features.csv
+      hash: md5
+      md5: 46648e7cd638cc5f97e6d90ce4b3e46a
+      size: 93858
+    - path: src/models/train.py
+      hash: md5
+      md5: 946355b353a2a236333d97da1a1114ae
+      size: 5682
+    params:
+      params.yaml:
+        model.k_max: 8
+        model.k_min: 2
+        model.n_clusters: 3
+        model.random_state: 42
+    outs:
+    - path: metrics/train_metrics.json
+      hash: md5
+      md5: bb609735fa043f2d0574c64561b05dcd
+      size: 205
+    - path: models/credit_risk_cluster_model.pkl
+      hash: md5
+      md5: e5037d241b57896f572cf6ba28c9aaa8
+      size: 5111
+  evaluate:
+    cmd: python src/models/evaluate.py
+    deps:
+    - path: configs/config.yaml
+      hash: md5
+      md5: 5c1b54466c5c14ba34794a5ce4ce0662
+      size: 533
+    - path: data/features/features.csv
+      hash: md5
+      md5: 46648e7cd638cc5f97e6d90ce4b3e46a
+      size: 93858
+    - path: data/processed/cleaned.csv
+      hash: md5
+      md5: 75331d2816ebeae02616ce30ae99b667
+      size: 45951
+    - path: models/credit_risk_cluster_model.pkl
+      hash: md5
+      md5: e5037d241b57896f572cf6ba28c9aaa8
+      size: 5111
+    - path: src/models/evaluate.py
+      hash: md5
+      md5: 8d6f8ba36a3b6c2265db9950baeed750
+      size: 8149
+    outs:
+    - path: data/processed/labeled_customers.csv
+      hash: md5
+      md5: ccfaa148deab5442476162ed96444d42
+      size: 58983
+    - path: metrics/eval_metrics.json
+      hash: md5
+      md5: bbec50893b1e62e3aa3e72e75bb7e86d
+      size: 405

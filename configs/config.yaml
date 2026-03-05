@@ -1,13 +1,22 @@
 data:
-  raw_path: "data/raw/german_credit.csv"
+  raw_path: "data/raw/german_credit_data.csv"
   processed_path: "data/processed/cleaned.csv"
   features_path: "data/features/features.csv"
+  output_path: "data/processed/labeled_customers.csv"
+  expected_columns:
+    - "Age"
+    - "Sex"
+    - "Job"
+    - "Housing"
+    - "Saving accounts"
+    - "Checking account"
+    - "Credit amount"
+    - "Duration"
+    - "Purpose"
 
 model:
-  target_column: "risk"
-  test_size: 0.2
+  type: "clustering"
   random_state: 42
-
-training:
-  model_name: "credit_risk_model"
   artifact_path: "models/"
+  model_name: "credit_risk_cluster_model"
+  scaler_path: "models/robust_scaler.pkl"
