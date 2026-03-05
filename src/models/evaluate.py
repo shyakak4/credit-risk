@@ -28,13 +28,14 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-
 def load_config(config_path: str = "configs/config.yaml") -> dict:
     with open(config_path, "r") as f:
         return yaml.safe_load(f)
 
 
-def build_numeric_profiles(df_original: pd.DataFrame, labels: np.ndarray) -> pd.DataFrame:
+def build_numeric_profiles(
+    df_original: pd.DataFrame, labels: np.ndarray
+) -> pd.DataFrame:
     """
     Build cluster profiles using numeric-safe versions of the features.
 
@@ -58,14 +59,18 @@ def build_numeric_profiles(df_original: pd.DataFrame, labels: np.ndarray) -> pd.
     df["checking_num"] = df["checking_account"].map(checking_order)
 
     # Build profile per cluster using interpretable columns
-    profiles = df.groupby("cluster").agg(
-        avg_credit_amount=("credit_amount", "mean"),
-        avg_duration=("duration", "mean"),
-        avg_age=("age", "mean"),
-        avg_saving=("saving_num", "mean"),
-        avg_checking=("checking_num", "mean"),
-        count=("age", "count"),
-    ).round(2)
+    profiles = (
+        df.groupby("cluster")
+        .agg(
+            avg_credit_amount=("credit_amount", "mean"),
+            avg_duration=("duration", "mean"),
+            avg_age=("age", "mean"),
+            avg_saving=("saving_num", "mean"),
+            avg_checking=("checking_num", "mean"),
+            count=("age", "count"),
+        )
+        .round(2)
+    )
 
     logger.info("Cluster profiles (original values):")
     logger.info(f"\n{profiles.to_string()}")
@@ -90,6 +95,7 @@ def assign_risk_labels(profiles: pd.DataFrame) -> dict:
     The cluster with lowest score  = low_risk
     Middle one                     = medium_risk
     """
+
     # Normalize each metric to 0-1 range so they contribute equally
     def normalize(series):
         range_ = series.max() - series.min()
@@ -119,7 +125,7 @@ def assign_risk_labels(profiles: pd.DataFrame) -> dict:
     return risk_map
 
 
-def run_evaluation() -> pd.DataFrame:
+def run_evaluation() -> pd.DataFrame: # pragma: no cover
     """
     Main evaluation function. Called by DVC pipeline.
     Reads processed data + trained model, produces labeled output.
@@ -127,7 +133,9 @@ def run_evaluation() -> pd.DataFrame:
     config = load_config()
 
     processed_path = config["data"]["processed_path"]
-    model_path = config["model"]["artifact_path"] + config["model"]["model_name"] + ".pkl"
+    model_path = (
+        config["model"]["artifact_path"] + config["model"]["model_name"] + ".pkl"
+    )
     output_path = config["data"]["output_path"]
 
     logger.info("--- Starting evaluation ---")
@@ -160,14 +168,22 @@ def run_evaluation() -> pd.DataFrame:
         for cluster_id, risk_label in risk_map.items():
             segment = df_result[df_result["cluster"] == cluster_id]
             mlflow.log_metric(f"{risk_label}_count", len(segment))
-            mlflow.log_metric(f"{risk_label}_avg_credit", round(segment["credit_amount"].mean(), 2))
-            mlflow.log_metric(f"{risk_label}_avg_duration", round(segment["duration"].mean(), 2))
+            mlflow.log_metric(
+                f"{risk_label}_avg_credit", round(segment["credit_amount"].mean(), 2)
+            )
+            mlflow.log_metric(
+                f"{risk_label}_avg_duration", round(segment["duration"].mean(), 2)
+            )
             mlflow.log_metric(f"{risk_label}_avg_age", round(segment["age"].mean(), 2))
 
     # ── Save eval metrics JSON for DVC ─────────────────────────────────────────
     risk_counts = df_result["risk_label"].value_counts().to_dict()
-    risk_avg_credit = df_result.groupby("risk_label")["credit_amount"].mean().round(2).to_dict()
-    risk_avg_duration = df_result.groupby("risk_label")["duration"].mean().round(2).to_dict()
+    risk_avg_credit = (
+        df_result.groupby("risk_label")["credit_amount"].mean().round(2).to_dict()
+    )
+    risk_avg_duration = (
+        df_result.groupby("risk_label")["duration"].mean().round(2).to_dict()
+    )
 
     eval_metrics = {
         "risk_distribution": risk_counts,
@@ -187,12 +203,16 @@ def run_evaluation() -> pd.DataFrame:
     logger.info(f"Labeled dataset saved to: {output_path}")
 
     # ── Print human-readable summary ───────────────────────────────────────────
-    summary = df_result.groupby("risk_label").agg(
-        customers=("cluster", "count"),
-        avg_credit_amount=("credit_amount", "mean"),
-        avg_duration_months=("duration", "mean"),
-        avg_age=("age", "mean"),
-    ).round(1)
+    summary = (
+        df_result.groupby("risk_label")
+        .agg(
+            customers=("cluster", "count"),
+            avg_credit_amount=("credit_amount", "mean"),
+            avg_duration_months=("duration", "mean"),
+            avg_age=("age", "mean"),
+        )
+        .round(1)
+    )
 
     logger.info("\n" + "=" * 60)
     logger.info("FINAL RISK SEGMENT SUMMARY")
@@ -204,5 +224,5 @@ def run_evaluation() -> pd.DataFrame:
     return df_result
 
 
-if __name__ == "__main__":
+if __name__ == "__main__": # pragma: no cover
     run_evaluation()

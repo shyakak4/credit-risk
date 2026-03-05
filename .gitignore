@@ -5,18 +5,26 @@ __pycache__/
 *.egg-info/
 credit_risk.egg-info/
 
-# Data — contents tracked by DVC, not Git
+# Data — tracked by DVC not Git
 data/**
 !data/**/*.dvc
 !data/**/.gitkeep
 
-# Models — artifacts tracked by DVC, not Git
+# Models — tracked by DVC not Git
 models/**
 !models/*.dvc
 
-# MLflow
+# MLflow — local experiment tracking
 mlflow.db
 mlruns/
+
+# Coverage
+.coverage
+.coverage.*
+htmlcov/
+
+# Pytest
+.pytest_cache/
 
 # Environment
 .env
@@ -28,9 +36,6 @@ notebooks/*.png
 # DVC internals
 .dvc/cache
 .dvc/tmp
-
-# Pytest
-.pytest_cache/
 
 # OS
 .DS_Store

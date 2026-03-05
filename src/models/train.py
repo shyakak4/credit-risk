@@ -30,7 +30,6 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-
 def load_config(config_path: str = "configs/config.yaml") -> dict:
     with open(config_path, "r") as f:
         return yaml.safe_load(f)
@@ -63,11 +62,13 @@ def find_optimal_k(
         inertia = km.inertia_
         sil = silhouette_score(X, labels) if k > 1 else 0.0
 
-        results.append({
-            "k": k,
-            "inertia": inertia,
-            "silhouette": sil,
-        })
+        results.append(
+            {
+                "k": k,
+                "inertia": inertia,
+                "silhouette": sil,
+            }
+        )
         logger.info(f"  K={k} | inertia={inertia:.1f} | silhouette={sil:.4f}")
 
     return results
@@ -94,7 +95,7 @@ def train_final_model(
     return model
 
 
-def run_training() -> KMeans:
+def run_training() -> KMeans: # pragma: no cover
     """
     Main training function. Called by DVC pipeline.
     Reads features, trains model, logs to MLflow, saves artifact.
@@ -103,7 +104,9 @@ def run_training() -> KMeans:
     params = load_params()
 
     features_path = config["data"]["features_path"]
-    model_path = config["model"]["artifact_path"] + config["model"]["model_name"] + ".pkl"
+    model_path = (
+        config["model"]["artifact_path"] + config["model"]["model_name"] + ".pkl"
+    )
     random_state = config["model"]["random_state"]
     n_clusters = params["model"]["n_clusters"]
     k_min = params["model"]["k_min"]
@@ -158,9 +161,8 @@ def run_training() -> KMeans:
             "n_samples": int(X.shape[0]),
             "n_features": int(X.shape[1]),
             "cluster_sizes": {
-                f"cluster_{int(k)}": int(v)
-                for k, v in zip(unique, counts)
-            }
+                f"cluster_{int(k)}": int(v) for k, v in zip(unique, counts)
+            },
         }
         Path("metrics").mkdir(exist_ok=True)
         with open("metrics/train_metrics.json", "w") as f:
@@ -179,5 +181,5 @@ def run_training() -> KMeans:
     return model
 
 
-if __name__ == "__main__":
+if __name__ == "__main__": # pragma: no cover
     run_training()
