@@ -80,7 +80,7 @@ def validate_raw_data(df: pd.DataFrame, expected_columns: list) -> bool:
     if not missing.empty:
         logger.info("  Missing values (expected):")
         for col, count in missing.items():
-            logger.info(f"    {col}: {count} ({count/len(df)*100:.1f}%)")
+            logger.info(f"    {col}: {count} ({count / len(df) * 100:.1f}%)")
 
     return True
 
