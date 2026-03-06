@@ -13,8 +13,8 @@ stages:
       size: 47544
     - path: src/data/ingestion.py
       hash: md5
-      md5: f0af2a5bf6cafc20a0d779d3cee05a2c
-      size: 3176
+      md5: 4297665315a059931aaa787ec9986f86
+      size: 3181
   preprocess:
     cmd: python src/data/preprocessing.py
     deps:
@@ -28,8 +28,8 @@ stages:
       size: 47544
     - path: src/data/preprocessing.py
       hash: md5
-      md5: 5a2049f8f1f4832b863b6676d6b3c829
-      size: 4182
+      md5: fea1789f566a371b16a289ed0ab2252f
+      size: 4240
     outs:
     - path: data/processed/cleaned.csv
       hash: md5
@@ -48,8 +48,8 @@ stages:
       size: 45951
     - path: src/features/build_features.py
       hash: md5
-      md5: 4878fdf626157267537d8d06ea3471c9
-      size: 5411
+      md5: f967143f2bc0221c7b5be11aec0b21aa
+      size: 5412
     params:
       params.yaml:
         model.n_clusters: 3
@@ -75,8 +75,8 @@ stages:
       size: 93858
     - path: src/models/train.py
       hash: md5
-      md5: 946355b353a2a236333d97da1a1114ae
-      size: 5682
+      md5: d169da78aa0cf6d06c9e5fe902269b58
+      size: 5750
     params:
       params.yaml:
         model.k_max: 8
@@ -113,8 +113,8 @@ stages:
       size: 5111
     - path: src/models/evaluate.py
       hash: md5
-      md5: 8d6f8ba36a3b6c2265db9950baeed750
-      size: 8149
+      md5: 7deca68c8e704ff627b51f0195522295
+      size: 8324
     outs:
     - path: data/processed/labeled_customers.csv
       hash: md5
