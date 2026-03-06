@@ -30,6 +30,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+
 def load_config(config_path: str = "configs/config.yaml") -> dict:
     with open(config_path, "r") as f:
         return yaml.safe_load(f)
@@ -95,7 +96,7 @@ def train_final_model(
     return model
 
 
-def run_training() -> KMeans: # pragma: no cover
+def run_training() -> KMeans:  # pragma: no cover
     """
     Main training function. Called by DVC pipeline.
     Reads features, trains model, logs to MLflow, saves artifact.
@@ -181,5 +182,5 @@ def run_training() -> KMeans: # pragma: no cover
     return model
 
 
-if __name__ == "__main__": # pragma: no cover
+if __name__ == "__main__":  # pragma: no cover
     run_training()

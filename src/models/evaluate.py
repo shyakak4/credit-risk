@@ -28,6 +28,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+
 def load_config(config_path: str = "configs/config.yaml") -> dict:
     with open(config_path, "r") as f:
         return yaml.safe_load(f)
@@ -125,7 +126,7 @@ def assign_risk_labels(profiles: pd.DataFrame) -> dict:
     return risk_map
 
 
-def run_evaluation() -> pd.DataFrame: # pragma: no cover
+def run_evaluation() -> pd.DataFrame:  # pragma: no cover
     """
     Main evaluation function. Called by DVC pipeline.
     Reads processed data + trained model, produces labeled output.
@@ -224,5 +225,5 @@ def run_evaluation() -> pd.DataFrame: # pragma: no cover
     return df_result
 
 
-if __name__ == "__main__": # pragma: no cover
+if __name__ == "__main__":  # pragma: no cover
     run_evaluation()
